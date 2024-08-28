@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowDefinition xmlns="urn:com:ericsson:schema:xml:oss:fbp_flow"
+	xmlns:oc="urn:com:ericsson:schema:xml:oss:oss_common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	oc:ns="com.ericsson.oss.services.alarm" oc:name="OSS_FM" oc:version="1.1.5">
+
+	<oc:modelCreationInfo author="XSABAND"
+		creationDate="2015-08-07">
+		<oc:designedModel componentId="FM" />
+	</oc:modelCreationInfo>
+
+	<oc:desc>This is the alarm route management service flow Module for FM</oc:desc>
+	
+	<input name="atrEventInput">
+		<attribute name="uri" value="modeled-eb:/" />
+		<attribute name="modeledEventClassName" value="com.ericsson.oss.services.fm.models.processedevent.ATRInputEvent" />
+		<attribute name="namespace" value="FM" />
+		<attribute name="version" value="1.0.1" />
+	</input>
+
+	<input name="alarmMetaDataInput">
+		<attribute name="uri" value="modeled-eb:/" />
+		<attribute name="modeledEventClassName" value="com.ericsson.oss.services.fm.models.processedevent.AlarmMetadataInformation" />
+		<attribute name="namespace" value="FM" />
+		<attribute name="version" value="1.0.1" />
+	</input>
+
+	<step name="metaDataProcessHandler">
+		<handler>
+			<named>metaDataProcessHandler</named>
+		</handler>
+	</step>
+	<step name="policyStateHandler">
+		<handler>
+			<named>policyStateHandler</named>
+		</handler>
+	</step>
+	<step name="dayAndTimeHandler">
+		<handler>
+			<named>dayAndTimeHandler</named>
+		</handler>
+	</step>
+
+	<step name="sourceObjectHandler">
+		<handler>
+			<named>sourceObjectHandler</named>
+		</handler>
+	</step>
+
+	<step name="perceivedSeverityHandler">
+		<handler>
+			<named>perceivedSeverityHandler</named>
+		</handler>
+	</step>
+	<step name="probableCauseHandler">
+		<handler>
+			<named>probableCauseHandler</named>
+		</handler>
+	</step>
+
+	<step name="eventTypeHandler">
+		<handler>
+			<named>eventTypeHandler</named>
+		</handler>
+	</step>
+
+	<step name="specificProblemHandler">
+		<handler>
+			<named>specificProblemHandler</named>
+		</handler>
+	</step>
+	<step name="autoAckOutTypeHandler">
+		<handler>
+			<named>autoAckOutTypeHandler</named>
+		</handler>
+	</step>
+	<step name="autoAckHandler">
+		<handler>
+			<named>autoAckHandler</named>
+		</handler>
+	</step>
+	<step name="routeActionDecideHandler">
+		<handler>
+			<named>routeActionDecideHandler</named>
+		</handler>
+	</step>
+	<step name="emailClientHandler">
+		<handler>
+			<named>emailClientHandler</named>
+		</handler>
+	</step>
+	<step name="fileRouteHandler">
+		<handler>
+			<named>fileRouteHandler</named>
+		</handler>
+	</step>
+	<step name="autoackthreading">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.ThreadManagementComponent</className>
+		</handler>
+		<attribute name="threadPoolSize" value="20" />
+		<attribute name="threadPriority" value="10" />
+		<attribute name="queueSize" value="150000" />
+	</step>
+	
+	<step name="atrthreading">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.ThreadManagementComponent</className>
+		</handler>
+		<attribute name="threadPoolSize" value="20" />
+		<attribute name="threadPriority" value="10" />
+		<attribute name="queueSize" value="150000" />
+	</step>
+	
+	<step name="emailthreading">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.ThreadManagementComponent</className>
+		</handler>
+		<attribute name="threadPoolSize" value="20" />
+		<attribute name="threadPriority" value="10" />
+		<attribute name="queueSize" value="150000" />
+	</step>
+	<step name="fileroutethreading">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.ThreadManagementComponent</className>
+		</handler>
+		<attribute name="threadPoolSize" value="20" />
+		<attribute name="threadPriority" value="10" />
+		<attribute name="queueSize" value="150000" />
+	</step>
+
+	<step name="metaDataThreading">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.ThreadManagementComponent</className>
+		</handler>
+		<attribute name="threadPoolSize" value="10" />
+		<attribute name="threadPriority" value="5" />
+		<attribute name="queueSize" value="50000" />
+	</step>
+	
+	<step name="autoAckBatch">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.BatchComponent</className>
+		</handler>
+		<attribute name="maxBatchSize" value="100" />
+		<attribute name="flushBatchPeriodMillis" value="1000" />
+	</step>
+
+	<path>
+		<from uri="atrEventInput" />
+		<to uri="atrthreading" />
+		<to uri="policyStateHandler" />
+		<to uri="sourceObjectHandler" />
+		<to uri="dayAndTimeHandler" />
+		<to uri="perceivedSeverityHandler" />
+		<to uri="probableCauseHandler" />
+		<to uri="eventTypeHandler" />
+		<to uri="specificProblemHandler" />
+ 		<to uri="routeActionDecideHandler" />	
+ 	</path>
+	
+	<path>
+		<from uri="routeActionDecideHandler" />
+		<to uri="autoackthreading" /> 
+		<to uri="autoAckOutTypeHandler" />
+		<to uri="autoAckBatch" />
+		<to uri="autoAckHandler" />
+	</path>
+
+	<path>
+		<from uri="routeActionDecideHandler" />
+		<to uri="emailthreading" />  
+		<to uri="emailClientHandler" />
+	</path>
+	
+	<path>
+		<from uri="routeActionDecideHandler" />
+		<to uri="fileroutethreading" />
+		<to uri="fileRouteHandler" />
+	</path>
+
+	<path>
+		<from uri="alarmMetaDataInput" />
+		<to uri="metaDataThreading" />
+		<to uri="metaDataProcessHandler" />
+	</path>
+	
+	
+</FlowDefinition>

@@ -1,0 +1,12 @@
+# Eclipse files
+.project
+.classpath
+.settings
+.checkstyle
+/target
+*.orig
+*.versionsBackup
+/target
+/target
+/target
+/bin/

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowDefinition xmlns="urn:com:ericsson:schema:xml:oss:fbp_flow"
+	xmlns:oc="urn:com:ericsson:schema:xml:oss:oss_common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	oc:ns="com.ericsson.oss.services.alarm" oc:name="OSS_FM" oc:version="1.1.5">
+
+	<oc:modelCreationInfo author="XSALMMA"
+		creationDate="2013-07-17">
+		<oc:designedModel componentId="FM" />
+	</oc:modelCreationInfo>
+
+	<oc:desc>This is the APS Module for FM</oc:desc>
+
+	<input name="eventInput">
+		<attribute name="uri" value="modEv:/" />
+		<attribute name="name" value="EventNotificationBatch" />
+		<attribute name="namespace" value="FM" />
+		<attribute name="version" value="1.0.1" />
+	</input>
+	<output name="eventOutput">
+		<attribute name="uri" value="modEv:/" />
+		<attribute name="name" value="ProcessedAlarmEvent" />
+		<attribute name="namespace" value="FM" />
+		<attribute name="version" value="1.0.1" />
+	</output>
+
+	<step name="preProcessor">
+		<handler>
+			<named>alarmPreProcessor</named>
+		</handler>
+	</step>
+
+	<step name="alarmHandler">
+		<handler>
+			<named>alarmHandler</named>
+		</handler>
+	</step>
+
+	<step name="tempHandler">
+		<handler>
+			<named>tempHandler</named>
+		</handler>
+	</step>
+	
+	<step name="threading">
+		<handler>
+			<className>com.ericsson.oss.services.eps.builtin.components.ThreadManagementComponent</className>
+		</handler>
+		<attribute name="threadPoolSize" value="20" />
+		<attribute name="threadPriority" value="10" />
+		<attribute name="queueSize" value="120000" />
+	</step>
+
+	<path>
+		<from uri="eventInput" />
+		<to uri="threading" />
+		<to uri="preProcessor" />
+		<to uri="alarmHandler" />
+		<to uri="eventOutput" />
+	</path>
+	
+</FlowDefinition>

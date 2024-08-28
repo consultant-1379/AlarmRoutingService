@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ericsson.nms</groupId>
+    <artifactId>integration</artifactId>
+    <version>15.2.0.40</version>
+  </parent>
+  <groupId>com.ericsson.nms.services</groupId>
+  <artifactId>AlarmRoutingService</artifactId>
+  <version>1.217.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <url>http://www.ericsson.com</url>
+  <organization>
+    <name>Ericsson</name>
+  </organization>
+
+  <prerequisites>
+    <maven>3.5.3</maven>
+  </prerequisites>
+
+  <name>[${project.artifactId}] JEE8 Project</name>
+
+  <properties>
+    <version.junit>4.15</version.junit>
+    <version.ejb>3.1</version.ejb>
+    <version.slf4j>1.7.7</version.slf4j>
+
+    <project.ear.defaultLibBundleDir>lib</project.ear.defaultLibBundleDir>
+    <!-- JBoss modules your service will automatically add to classpath -->
+    <project.ear.Dependencies>org.slf4j</project.ear.Dependencies>
+
+    <!-- DPS -->
+    <version.dps>2.86.4</version.dps>
+
+    <version.service.framework>4.13.1</version.service.framework>
+    <artifact.jboss.jee.spec>jboss-javaee-8.0</artifact.jboss.jee.spec>
+    <version.jboss.jee.spec>1.0.3.Final</version.jboss.jee.spec>
+    <version.jee>8</version.jee>
+
+    <!-- Models -->
+    <version.alarmpersistencemodel>1.27.5</version.alarmpersistencemodel>
+    <version.fmprocessedeventmodel>1.81.1</version.fmprocessedeventmodel>
+    <version.fmalarmroutefileschedulemodel>1.2.10</version.fmalarmroutefileschedulemodel>
+    <version.fmcommon>1.207.2</version.fmcommon>
+    <version.fmmediationmodel>1.48.1</version.fmmediationmodel>
+    <version.arms.api>1.206.1</version.arms.api>
+    <version.AlarmActionService>1.209.1</version.AlarmActionService>
+
+    <!--Model Service Dependencies -->
+    <version.modeling.bom>21.1.5</version.modeling.bom>
+
+    <!-- Model deployment tool -->
+    <version.model.deployment.tool>9.1.3</version.model.deployment.tool>
+
+    <!-- EPS versions -->
+    <version.eps>4.2.1</version.eps>
+    <version.eps.builtin.components>3.4.1</version.eps.builtin.components>
+    <version.webpush.bom>7.0.1</version.webpush.bom>
+    <version.jackson>1.9.14.jdk17-redhat-00001</version.jackson>
+
+    <!-- Test start -->
+    <version.mediationsdkeventmodels>1.0.28</version.mediationsdkeventmodels>
+    <version.mediationcoreapichannelmodels>1.2.22</version.mediationcoreapichannelmodels>
+    <version.MediationServiceModelJar>1.0.9</version.MediationServiceModelJar>
+    <version.NetworkElementDefinitionModelJar>3.26.2</version.NetworkElementDefinitionModelJar>
+    <version.CppCiModelJar>1.0.15</version.CppCiModelJar>
+    <version.TopCiModelJar>1.0.6</version.TopCiModelJar>
+    <version.OssTopModelJar>2.1.6</version.OssTopModelJar>
+    <version.cpp.platformtype.model.jar>1.0.11</version.cpp.platformtype.model.jar>
+    <version.erbs.netype.model.jar>1.0.7</version.erbs.netype.model.jar>
+    <version.geolocation.model>1.6.7</version.geolocation.model>
+    <!-- Test end -->
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.ericsson.oss.itpf.sdk</groupId>
+        <artifactId>ServiceFrameworkJBossBOM</artifactId>
+        <version>${version.service.framework}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.ericsson.oss.itpf.modeling</groupId>
+        <artifactId>Modeling-BOM</artifactId>
+        <version>${version.modeling.bom}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.ericsson.oss.services.fm.models</groupId>
+        <artifactId>fmprocessedeventmodel-jar</artifactId>
+        <version>${version.fmprocessedeventmodel}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ericsson.oss.services.fm.alarmroutes</groupId>
+        <artifactId>fm-alarm-route-file-schedule-model-jar</artifactId>
+        <version>${version.fmalarmroutefileschedulemodel}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ericsson.oss.itpf.datalayer.dps</groupId>
+        <artifactId>data-persistence-service-bom</artifactId>
+        <version>${version.dps}</version>
+        <type>pom</type>
+        <scope>import</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>com.ericsson.oss.itpf.modeling</groupId>
+            <artifactId>Modeling-BOM</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.ericsson.oss.presentation.server</groupId>
+        <artifactId>WebPushServiceBOM</artifactId>
+        <version>${version.webpush.bom}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings
+          only. It has no influence on the Maven build itself. -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <versionRange>[2.4,)</versionRange>
+                    <goals>
+                      <goal>analyze-dep-mgt</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <versionRange>[2.7,)</versionRange>
+                    <goals>
+                      <goal>generate-application-xml</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.ericsson.maven.plugins</groupId>
+                    <artifactId>rstate-maven-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                      <goal>rstate</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>[1.1,)</versionRange>
+                    <goals>
+                      <goal>enforce</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <versionRange>[1.7,)</versionRange>
+                    <goals>
+                      <goal>regex-property</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.17</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.11.2</version>
+          </dependency>
+          <dependency>
+            <groupId>com.ericsson.cds</groupId>
+            <artifactId>checkstyle-module</artifactId>
+            <version>1.1.20</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <consoleOutput>true</consoleOutput>
+          <logViolationsToConsole>true</logViolationsToConsole>
+          <configLocation>/enm/checkstyle/checkstyle.xml</configLocation>
+          <!-- <suppressionsLocation>/enm/checkstyle-suppressions.xml</suppressionsLocation> -->
+          <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+          <violationSeverity>warning</violationSeverity>
+          <includeTestSourceDirectory>false</includeTestSourceDirectory>
+          <!--<propertiesLocation>checkstyle.properties</propertiesLocation> -->
+        </configuration>
+        <executions>
+          <execution>
+            <configuration>
+              <!-- Change this (to false, or remove) if you do NOT want Checkstyle
+                to fail your build -->
+              <failOnViolation>false</failOnViolation>
+            </configuration>
+            <id>check-style</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>validate</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.4</version>
+        <executions>
+          <execution>
+            <id>prepare-unit-tests</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <additionalparam>-Xdoclint:none</additionalparam>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.ericsson.oss.itpf.sdk</groupId>
+      <artifactId>sdk-resources-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- The dependency is needed when "JSR-330: Dependency Injection" is used
+      (e.g. @Inject, @Qualifier etc.) -->
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- The dependency is needed when CDI (Contexts and Dependency Injection)
+      is used. -->
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Dependency for Bean validation -->
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Dependency for SLF4J logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Dependency for JUnit tests -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Dependency for mocking in Unit tests -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.9.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ericsson.oss.itpf.sdk</groupId>
+      <artifactId>sdk-recording-api</artifactId>
+      <scope>provided</scope>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec</groupId>
+      <artifactId>${artifact.jboss.jee.spec}</artifactId>
+      <version>${version.jboss.jee.spec}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>AlarmRoutingService-api</module>
+    <module>AlarmRoutingService-ejb</module>
+    <module>AlarmRoutingService-war</module>
+    <module>AlarmRoutingService-ear</module>
+    <module>ERICAlarmRoutingService_CXP9030443</module>
+    <module>testsuite</module>
+  </modules>
+
+  <scm>
+    <tag>AlarmRoutingService-${project.version}</tag>
+  </scm>
+</project>

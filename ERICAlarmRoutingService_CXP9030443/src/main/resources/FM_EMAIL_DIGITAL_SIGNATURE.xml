@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applications xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="CertificateRequest.xsd">
+	<application>
+		<certificates>
+			<certificate>
+				<tbscertificate>
+					<subject>
+						<entityname>##HOSTNAME##</entityname>
+						<distinguishname>CN=##HOSTNAME##, O=ericsson, OU=enm, C=SE</distinguishname>
+					</subject>
+					<!--now certificateextension not present: default SubjectAlternativeName 
+						(profile) is used -->
+				</tbscertificate>
+				<!-- Alarm_Monitor_Client_Email_EP profile must defined/configured on 
+					PKI -->
+				<!-- Alarm_Monitor_Client_Email_EP is hard coded on CredM Service -->
+				<!-- CLI and JBoss use the same profile -->
+				<endentityprofilename>Alarm_Monitor_Client_Email_EP</endentityprofilename>
+				<keypair>
+					<keypairsize>2048</keypairsize>
+					<keypairalgorithm>RSA</keypairalgorithm>
+				</keypair>
+				<keystore>
+					<jkskeystore>
+						<!--please refer also to jboss standalone.xml -->
+						<storealias>jbossVault</storealias>
+						<storelocation>/ericsson/fm/data/certs/FM_EMAIL_DIGITAL_SIGNATURE.jks</storelocation>
+						<storepassword>jbossKS</storepassword>
+					</jkskeystore>
+				</keystore>
+			</certificate>
+		</certificates>
+		<crlupdatemode>CrlRequired</crlupdatemode>
+	</application>
+
+	<user>
+		<username>jboss_user</username>
+		<usergroup>jboss</usergroup>
+	</user>
+
+</applications>
